@@ -1,24 +1,51 @@
 from  PyQt5 import QtWidgets, QtGui, QtCore
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog
+from  PyQt5.QtCore import QFileInfo
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
 import sys
 import docx
 import re
 import pandas as  pd #Установил ещё openpyxl, т.к. выдавал ошибку
 from functools import partial
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
 
 
 #Выбор файлов
 def diploma_sample():
-    file_choice, _ = QFileDialog.getOpenFileNames(window, 'Выбрать файл', 'C://')
-    label.setText(f'{file_choice[0]}')
+    file_dialog = QFileDialog(window, 'Выбрать файл', 'C://')
+    file_dialog.setFileMode(QFileDialog.ExistingFile)
+    file_dialog.setNameFilter("Microsoft Word (*.doc *.docx)")
+    if file_dialog.exec_() == QFileDialog.Accepted:
+        file_choice = file_dialog.selectedFiles()[0]
+        if QFileInfo(file_choice).suffix() not in ["doc", "docx"]:
+            QMessageBox.warning(window, "Ошибка", "Выбранный файл не является документом Word (.doc или .docx)")
+            return
+        label.setText(file_choice)
+
 
 def letter_sample():
-    file_choice, _ = QFileDialog.getOpenFileNames(window, 'Выбрать файл', 'C://')
-    label3.setText(f'{file_choice[0]}')
+    file_dialog = QFileDialog(window, 'Выбрать файл', 'C://')
+    file_dialog.setFileMode(QFileDialog.ExistingFile)
+    file_dialog.setNameFilter("Microsoft Word (*.doc *.docx)")
+    if file_dialog.exec_() == QFileDialog.Accepted:
+        file_choice = file_dialog.selectedFiles()[0]
+        if QFileInfo(file_choice).suffix() not in ["doc", "docx"]:
+            QMessageBox.warning(window, "Ошибка", "Выбранный файл не является документом Word (.doc или .docx)")
+            return
+        label3.setText(file_choice)
 
 def databased():
-    file_choice, _ = QFileDialog.getOpenFileNames(window, 'Выбрать файл', 'C://')
-    label2.setText(f'{file_choice[0]}')
+    file_dialog = QFileDialog(window, 'Выбрать файл', 'C://')
+    file_dialog.setFileMode(QFileDialog.ExistingFile)
+    file_dialog.setNameFilter("Microsoft Excel (*.xlsx *.xls)")
+    if file_dialog.exec_() == QFileDialog.Accepted:
+        file_choice = file_dialog.selectedFiles()[0]
+        if QFileInfo(file_choice).suffix() not in ['xlsx', 'xls']:
+            QMessageBox.warning(window, "Ошибка", "Выбранный файл не является документом Excel (.xlsx или .xls)")
+            return
+        label2.setText(file_choice)
 
 def delete_label_text_diploma():
     label.setText('')
@@ -39,9 +66,9 @@ def create_data(item: list) -> dict:  # Создание словаря с ме�
     full_name = f'{item[0]} {item[1]} {item[2]}'
     place = item[3]
     full_name_dictionary_and_place = {
-                "{{full_name}}": full_name,
-                "{{place}}": place
-                            }
+                        '{{full_name}}': full_name,
+                        '{{place}}': place,     
+                                      }
     return full_name_dictionary_and_place
 
 
@@ -61,9 +88,9 @@ def add_labels_to_letter():
         font.name = 'Times New Roman'
 
         for paragraph in doc.paragraphs:
-            new_text_letter, count_entry_letter = re.subn('|'.join(re.escape(key) for key in dictor), lambda match: dictor[match.group()], paragraph.text)
-        if count_entry_letter > 0:
-            paragraph.text = new_text_letter
+            new_text_diploma, count_entry_diploma = re.subn('|'.join(dictor.keys()), lambda match: dictor[match.group()], paragraph.text)
+        if count_entry_diploma > 0:
+            paragraph.text = new_text_diploma
         name_file_letter = ' '.join(item[:3])
         doc.save(f'{name_file_letter}.docx')
 
@@ -85,35 +112,154 @@ def add_labels_to_diploma():
         font.size = docx.shared.Pt(14)
         font.name = 'Times New Roman'
         # Замена меток на значения в документе
+
         for paragraph in doc.paragraphs:
-            new_text_diploma, count_entry_diploma = re.subn('|'.join(re.escape(key) for key in dictor), lambda match: dictor[match.group()], paragraph.text)
+            new_text_diploma, count_entry_diploma = re.subn('|'.join(dictor.keys()), lambda match: dictor[match.group()], paragraph.text)
         if count_entry_diploma > 0:
             paragraph.text = new_text_diploma
 
+        # Сохранение документа с ФИО участника в качестве имени файла
+        name_file_diploma = ' '.join(item[:4])
+        doc.save(f'{name_file_diploma} место.docx')
         
+def create_mail(item):
+    mail = item[4]
+    return mail
+
+def send_diploma_to_email():
+    #Считаваю данные из label'ов и передаю их в переменные в виде строки
+    file_choice_diploma, file_choice_data = get_url_to_diploma()
+    # Открытие выбранного файла с участниками и местами
+    df = pd.read_excel(file_choice_data)
+    data_list = df.values.tolist()  # преобразование всего датафрейма в список списков
+    #Прохожу по всем вложенным спискам в списке
+    for i, item in enumerate(data_list):
+        # Создание словаря с метками и их значениями
+        dictor = create_data(item)
+        # Открытие выбранного документа 
+        doc = docx.Document(file_choice_diploma)
+        # Установка стилей документа
+        style = doc.styles['Normal']
+        font = style.font
+        font.size = docx.shared.Pt(14)
+        font.name = 'Times New Roman'
+        # Замена меток на значения в документе
+
+        for paragraph in doc.paragraphs:
+            new_text_diploma, count_entry_diploma = re.subn('|'.join(dictor.keys()), lambda match: dictor[match.group()], paragraph.text)
+        if count_entry_diploma > 0:
+            paragraph.text = new_text_diploma
+
         # Сохранение документа с ФИО участника в качестве имени файла
         name_file_diploma = ' '.join(item[:4])
         doc.save(f'{name_file_diploma} место.docx')
 
+        mail_to_deliver = create_mail(item)
+        subject = 'Диплом'
+        text = 'Вы выиграли в олимпиаде! Диплом во вложении письма'
+        files = [f'{name_file_diploma} место.docx']
+        # Параметры соединения с SMTP 
+        smtp_server = 'smtp.mail.ru'
+        smtp_port = 587
+        smtp_user = 'bezrukov30.00@mail.ru'
+        smtp_password = ''#here was password (I delete it)
 
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
+        server.login(smtp_user, smtp_password)
+        # Тут кому отправляем и от кого
+        msg = MIMEMultipart()
+        msg['From'] = smtp_user
+        msg['To'] = mail_to_deliver
+        msg['Subject'] = subject
+        # тут текст из text
+        msg.attach(MIMEText(text))
+        # Тут добавляем файл ворд в письмо
+        if files:
+            for file in files:
+                with open(file, 'rb') as file_user:
+                    attach = MIMEApplication(file_user.read(), _subtype='docx')
+                    attach.add_header('Content-Disposition', 'attachment', filename=file)
+                    msg.attach(attach)
 
+        server.sendmail(smtp_user, mail_to_deliver, msg.as_string())
+        server.quit()
 
+def send_letter_to_email():
+    file_choice_letter, file_choice_data = get_url_to_letter()
+    letter_data = pd.read_excel(file_choice_data)
+    data_list_letter = letter_data.values.tolist()
+    for i, item in enumerate(data_list_letter):
+        dictor = create_data(item)
 
+        doc = docx.Document(file_choice_letter)
+    
+        style = doc.styles['Normal']
+        font = style.font
+        font.size = docx.shared.Pt(14)
+        font.name = 'Times New Roman'
 
-#def application():
+        for paragraph in doc.paragraphs:
+            new_text_diploma, count_entry_diploma = re.subn('|'.join(dictor.keys()), lambda match: dictor[match.group()], paragraph.text)
+        if count_entry_diploma > 0:
+            paragraph.text = new_text_diploma
+        name_file_letter = ' '.join(item[:3])
+        doc.save(f'{name_file_letter}.docx')
+
+        mail_to_deliver = create_mail(item)
+        subject = 'Диплом'
+        text = 'Вы выиграли в олимпиаде! Диплом во вложении письма'
+        files = [f'{name_file_letter}.docx']
+         
+        smtp_server = 'smtp.mail.ru'
+        smtp_port = 587
+        smtp_user = 'bezrukov30.00@mail.ru'
+        smtp_password = ''#here was password (I delete it)
+
+        server = smtplib.SMTP(smtp_server, smtp_port)
+        server.starttls()
+        server.login(smtp_user, smtp_password)
+        
+        msg = MIMEMultipart()
+        msg['From'] = smtp_user
+        msg['To'] = mail_to_deliver
+        msg['Subject'] = subject
+
+        msg.attach(MIMEText(text))
+        if files:
+            for file in files:
+                with open(file, 'rb') as file_user:
+                    attach = MIMEApplication(file_user.read(), _subtype='docx')
+                    attach.add_header('Content-Disposition', 'attachment', filename=file)
+                    msg.attach(attach)
+        server.sendmail(smtp_user, mail_to_deliver, msg.as_string())
+        server.quit()
+
 app = QApplication(sys.argv)
 window = QMainWindow()
 window.setWindowTitle('Генератор дипломов и благодарственных писем')
 window.setGeometry(500, 260, 700, 500)
 # ------------------------------------------------------------------------
 button_generator_diploma = QtWidgets.QPushButton(window)
-button_generator_diploma.move(120, 400)
+button_generator_diploma.move(190, 350)
 button_generator_diploma.setText('Генерация диплома')
 button_generator_diploma.setFixedWidth(150)
 button_generator_diploma.clicked.connect(add_labels_to_diploma)
 # ------------------------------------------------------------------------
+button_email_send_diploma = QtWidgets.QPushButton(window)
+button_email_send_diploma.move(190, 450)
+button_email_send_diploma.setText('Отправка диплома')
+button_email_send_diploma.setFixedWidth(150)
+button_email_send_diploma.clicked.connect(send_diploma_to_email)
+# ------------------------------------------------------------------------
+button_email_send_letter = QtWidgets.QPushButton(window)
+button_email_send_letter.move(400, 450)
+button_email_send_letter.setText('Отправка \n благодарственного письма\n ')
+button_email_send_letter.setFixedWidth(150)
+button_email_send_letter.clicked.connect(send_letter_to_email)
+# ------------------------------------------------------------------------
 button_generator_letter = QtWidgets.QPushButton(window)
-button_generator_letter.move(440, 400)
+button_generator_letter.move(400, 350)
 button_generator_letter.setText('Генерация \n благодарственного письма')
 button_generator_letter.setFixedWidth(150)
 button_generator_letter.clicked.connect(add_labels_to_letter)
