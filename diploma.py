@@ -10,7 +10,11 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
-from ui_diploma import Ui_DiplomaWindow
+from Ui_Diploma import Ui_DiplomaWindow
+
+from Classes.SendMail import SendMail
+from settings import settings
+
 class Window3(QtWidgets.QMainWindow):
     def __init__(self):
         super(Window3, self).__init__()
@@ -23,6 +27,11 @@ class Window3(QtWidgets.QMainWindow):
         self.ui.pushButton_4.clicked.connect(self.send_diploma_to_email)
         self.ui.pushButton_6.clicked.connect(self.delete_label_text_diploma)
         self.ui.pushButton_7.clicked.connect(self.delete_label_text_databased)
+
+        self.__mail = SendMail(settings.mail_server,
+                               settings.mail_port,
+                               settings.mail_login,
+                               settings.mail_password)
         
     
     #Выбор файлов
@@ -101,68 +110,68 @@ class Window3(QtWidgets.QMainWindow):
                 # Сохранение документа с ФИО участника в качестве имени файла
                 self.name_file_diploma = ' '.join(self.item[:4])
                 self.doc.save(f'{self.name_file_diploma} место.docx')
+
     def create_mail(self, item):
         self.mail = item[4]
         return self.mail
 
     def send_diploma_to_email(self):
         #Считаваю данные из label'ов и передаю их в переменные в виде строки
-        self.file_choice_diploma, self.file_choice_data = self.get_url_to_diploma()
+        file_choice_diploma, file_choice_data = self.get_url_to_diploma()
         # Открытие выбранного файла с участниками и местами
-        self.df = pd.read_excel(self.file_choice_data)
-        self.data_list = self.df.values.tolist()  # преобразование всего датафрейма в список списков
-        #Прохожу по всем вложенным спискам в списке
-        for self.i, self.item in enumerate(self.data_list):
+        df = pd.read_excel(file_choice_data)
+        data_list = df.values.tolist()  # преобразование всего датафрейма в список списков
+
+        messages = []
+
+        for i, item in enumerate(data_list):
             # Создание словаря с метками и их значениями
-            self.dictor = self.create_data(self.item)
+            dictor = self.create_data(item)
             # Открытие выбранного документа 
-            self.doc = docx.Document(self.file_choice_diploma)
+            doc = docx.Document(file_choice_diploma)
             # Установка стилей документа
-            self.style = self.doc.styles['Normal']
-            self.font = self.style.font
-            self.font.size = docx.shared.Pt(14)
-            self.font.name = 'Times New Roman'
+            style = doc.styles['Normal']
+            font = style.font
+            font.size = docx.shared.Pt(14)
+            font.name = 'Times New Roman'
             # Замена меток на значения в документе
 
-            for self.paragraph in self.doc.paragraphs:
-                self.new_text_diploma, self.count_entry_diploma = re.subn('|'.join(self.dictor.keys()), lambda match: self.dictor[match.group()], self.paragraph.text)
-            if self.count_entry_diploma > 0:
-                self.paragraph.text = self.new_text_diploma
+            paragraph = None
+            count_entry_diploma = 0
+            new_text_diploma = None
+
+            for paragraph in doc.paragraphs:
+                new_text_diploma, count_entry_diploma = re.subn('|'.join(dictor.keys()), lambda match: dictor[match.group()], paragraph.text)
+            if count_entry_diploma > 0:
+                paragraph.text = new_text_diploma
 
             # Сохранение документа с ФИО участника в качестве имени файла
-            self.name_file_diploma = ' '.join(self.item[:4])
-            self.doc.save(f'{self.name_file_diploma} место.docx')
+            name_file_diploma = ' '.join(item[:4])
+            doc.save(f'{name_file_diploma} место.docx')
 
-            self.mail_to_deliver = self.create_mail(self.item)
-            self.subject = 'Диплом'
-            self.text = 'Вы выиграли в олимпиаде! Диплом во вложении письма'
-            self.files = [f'{self.name_file_diploma} место.docx']
-            # Параметры соединения с SMTP 
-            self.smtp_server = 'smtp.mail.ru'
-            self.smtp_port = 587
-            self.smtp_user = 'bezrukov30.00@mail.ru'
-            self.smtp_password = ''#Отправляет, я проверил
+            mail_to_deliver = self.create_mail(item)
+            subject = 'Диплом'
+            text = 'Вы выиграли в олимпиаде! Диплом во вложении письма'
+            files = [f'{name_file_diploma} место.docx']
+            # Параметры соединения с SMTP
 
-            self.server = smtplib.SMTP(self.smtp_server, self.smtp_port)
-            self.server.starttls()
-            self.server.login(self.smtp_user, self.smtp_password)
-            # Тут кому отправляем и от кого
-            self.msg = MIMEMultipart()
-            self.msg['From'] = self.smtp_user
-            self.msg['To'] = self.mail_to_deliver
-            self.msg['Subject'] = self.subject
+
+            msg = MIMEMultipart()
+            msg['From'] = settings.mail_login
+            msg['To'] = mail_to_deliver
+            msg['Subject'] = subject
             # тут текст из text
-            self.msg.attach(MIMEText(self.text))
+            msg.attach(MIMEText(text))
             # Тут добавляем файл ворд в письмо
-            if self.files:
-                for self.file in self.files:
-                    with open(self.file, 'rb') as self.file_user:
-                        self.attach = MIMEApplication(self.file_user.read(), _subtype='docx')
-                        self.attach.add_header('Content-Disposition', 'attachment', filename=self.file)
-                        self.msg.attach(self.attach)
+            if files:
+                for file in files:
+                    with open(file, 'rb') as file_user:
+                        attach = MIMEApplication(file_user.read(), _subtype='docx')
+                        attach.add_header('Content-Disposition', 'attachment', filename=file)
+                        msg.attach(attach)
 
-            self.server.sendmail(self.smtp_user, self.mail_to_deliver, self.msg.as_string())
-            self.server.quit()
+            messages.append(msg)
 
+        self.__mail.send_message(messages)
     
 

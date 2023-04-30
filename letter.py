@@ -3,13 +3,15 @@ from  PyQt5.QtCore import QFileInfo
 from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QMessageBox
 import docx
 import re
-import pandas as  pd #Установил ещё openpyxl, т.к. выдавал ошибку
+import pandas as pd
 from functools import partial
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
-from ui_letter import Ui_LetterWindow
+from Ui_Letter import Ui_LetterWindow
+
+
 class Window2(QtWidgets.QMainWindow):
     def __init__(self):
         super(Window2, self).__init__()
@@ -122,7 +124,7 @@ class Window2(QtWidgets.QMainWindow):
             self.smtp_server = 'smtp.mail.ru'
             self.smtp_port = 587
             self.smtp_user = 'bezrukov30.00@mail.ru'
-            self.smtp_password = ''#here was password (I delete it)
+            self.smtp_password = 'JzdZFaQ61KvnrqBmeb9d'#here was password (I delete it)
 
             self.server = smtplib.SMTP(self.smtp_server, self.smtp_port)
             self.server.starttls()
