@@ -6,15 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1022</width>
-    <height>737</height>
+    <width>750</width>
+    <height>663</height>
    </rect>
-  </property>
-  <property name="baseSize">
-   <size>
-    <width>20</width>
-    <height>20</height>
-   </size>
   </property>
   <property name="palette">
    <palette>
@@ -438,230 +432,159 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>220</y>
-      <width>281</width>
-      <height>101</height>
+      <x>480</x>
+      <y>410</y>
+      <width>141</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>Sitka</family>
-      <pointsize>18</pointsize>
+      <pointsize>26</pointsize>
      </font>
     </property>
     <property name="text">
-     <string>Выбрать шаблон 
-благодарственного письма</string>
+     <string>Войти</string>
     </property>
    </widget>
    <widget class="QLabel" name="label">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>70</y>
-      <width>751</width>
-      <height>101</height>
+      <x>50</x>
+      <y>30</y>
+      <width>671</width>
+      <height>91</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>Georgia</family>
-      <pointsize>28</pointsize>
+      <pointsize>24</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
      </font>
     </property>
     <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Генерация и Отправка благодартсвенных &lt;br/&gt;писем&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
-   <widget class="Line" name="line">
-    <property name="geometry">
-     <rect>
-      <x>-20</x>
-      <y>170</y>
-      <width>1051</width>
-      <height>20</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-      <horstretch>2</horstretch>
-      <verstretch>2</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="sizeIncrement">
-     <size>
-      <width>10</width>
-      <height>10</height>
-     </size>
-    </property>
-    <property name="baseSize">
-     <size>
-      <width>20</width>
-      <height>2</height>
-     </size>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>26</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Генератор дипломов,&lt;br/&gt; сертификатов и благодарственных писем&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
       <x>310</x>
-      <y>250</y>
-      <width>491</width>
+      <y>150</y>
+      <width>141</width>
       <height>51</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>9</pointsize>
+      <family>Georgia</family>
+      <pointsize>36</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Войти</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>240</y>
+      <width>351</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="text">
      <string/>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_2">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>350</y>
-      <width>281</width>
-      <height>101</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Sitka</family>
-      <pointsize>18</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Выбрать данные</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_7">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>650</y>
-      <width>111</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Sitka</family>
-      <pointsize>18</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Назад</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_3">
-    <property name="geometry">
-     <rect>
-      <x>810</x>
-      <y>240</y>
-      <width>161</width>
-      <height>71</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Sitka</family>
-      <pointsize>18</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Очистить</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
     <property name="geometry">
      <rect>
-      <x>310</x>
-      <y>370</y>
-      <width>491</width>
-      <height>51</height>
+      <x>140</x>
+      <y>240</y>
+      <width>111</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>9</pointsize>
+      <family>Georgia</family>
+      <pointsize>24</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="text">
+     <string>Логин:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_3">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>330</y>
+      <width>351</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
      </font>
     </property>
     <property name="text">
      <string/>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_4">
+   <widget class="QLabel" name="label_5">
     <property name="geometry">
      <rect>
-      <x>810</x>
-      <y>360</y>
-      <width>161</width>
-      <height>71</height>
+      <x>140</x>
+      <y>330</y>
+      <width>131</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <family>Sitka</family>
-      <pointsize>18</pointsize>
+      <family>Georgia</family>
+      <pointsize>24</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
      </font>
     </property>
     <property name="text">
-     <string>Очистить</string>
+     <string>Пароль:</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_10">
+   <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>580</x>
-      <y>490</y>
-      <width>321</width>
-      <height>111</height>
+      <x>140</x>
+      <y>410</y>
+      <width>201</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="font">
      <font>
       <family>Sitka</family>
-      <pointsize>18</pointsize>
+      <pointsize>26</pointsize>
      </font>
     </property>
     <property name="text">
-     <string>Отправка благодарственного 
-письма</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton_5">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>490</y>
-      <width>321</width>
-      <height>111</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>Sitka</family>
-      <pointsize>18</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Генерация благодарственного 
-письма</string>
+     <string>Регистрация</string>
     </property>
    </widget>
   </widget>

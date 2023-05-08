@@ -1,10 +1,10 @@
 from PyQt5.QtWidgets import QApplication
 import sys
-from main_window import MainWindow
+from log_in import WindowLogIn
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    main_window = MainWindow()
-    main_window.show()
+    log_in = WindowLogIn()
+    log_in.show()
     sys.exit(app.exec_())
     

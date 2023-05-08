@@ -9,18 +9,19 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
-from ui_letter import Ui_LetterWindow
-class Window2(QtWidgets.QMainWindow):
+from ui_letter import Ui_letter
+class WindowLetter(QtWidgets.QMainWindow):
     def __init__(self):
-        super(Window2, self).__init__()
-        self.ui = Ui_LetterWindow()
+        super(WindowLetter, self).__init__()
+        self.ui = Ui_letter()
         self.ui.setupUi(self)
         self.ui.pushButton.clicked.connect(self.letter_sample)
         self.ui.pushButton_2.clicked.connect(self.databased)
-        self.ui.pushButton_3.clicked.connect(self.add_labels_to_letter)
-        self.ui.pushButton_4.clicked.connect(self.send_letter_to_email)
-        self.ui.pushButton_6.clicked.connect(self.delete_label_text_letter)
-        self.ui.pushButton_7.clicked.connect(self.delete_label_text_databased)
+        self.ui.pushButton_5.clicked.connect(self.add_labels_to_letter)
+        self.ui.pushButton_6.clicked.connect(self.send_letter_to_email)
+        self.ui.pushButton_3.clicked.connect(self.delete_label_text_letter)
+        self.ui.pushButton_4.clicked.connect(self.delete_label_text_databased)
+        self.ui.pushButton_7.clicked.connect(self.exit)
         
     def letter_sample(self):
         self.file_dialog = QFileDialog(self, 'Выбрать файл', 'C://')
@@ -43,7 +44,11 @@ class Window2(QtWidgets.QMainWindow):
                 QMessageBox.warning(self, "Ошибка", "Выбранный файл не является документом Excel (.xlsx или .xls)")
                 return
             self.ui.label_3.setText(self.file_choice)
-
+    def exit(self):
+        from main_window import MainWindow
+        self.main = MainWindow()
+        self.main.show()
+        self.close()
 
     def delete_label_text_letter(self):
         self.ui.label_2.setText('')

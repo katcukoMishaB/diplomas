@@ -10,11 +10,10 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-
-class Ui_letter(object):
+class Ui_SertificateWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1022, 737)
+        MainWindow.resize(930, 721)
         MainWindow.setBaseSize(QtCore.QSize(20, 20))
         palette = QtGui.QPalette()
         brush = QtGui.QBrush(QtGui.QColor(0, 0, 0))
@@ -156,21 +155,21 @@ class Ui_letter(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(20, 220, 281, 101))
+        self.pushButton.setGeometry(QtCore.QRect(30, 250, 241, 91))
         font = QtGui.QFont()
         font.setFamily("Sitka")
         font.setPointSize(18)
         self.pushButton.setFont(font)
         self.pushButton.setObjectName("pushButton")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(170, 80, 751, 111))
+        self.label.setGeometry(QtCore.QRect(55, 120, 850, 71))
         font = QtGui.QFont()
         font.setFamily("Georgia")
-        font.setPointSize(28)
+        font.setPointSize(36)
         self.label.setFont(font)
         self.label.setObjectName("label")
         self.line = QtWidgets.QFrame(self.centralwidget)
-        self.line.setGeometry(QtCore.QRect(-20, 170, 1051, 20))
+        self.line.setGeometry(QtCore.QRect(-20, 180, 971, 16))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(2)
         sizePolicy.setVerticalStretch(2)
@@ -186,62 +185,38 @@ class Ui_letter(object):
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
-        self.label_2 = QtWidgets.QLabel(self.centralwidget)
-        self.label_2.setGeometry(QtCore.QRect(310, 250, 491, 51))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.label_2.setFont(font)
-        self.label_2.setText("")
-        self.label_2.setObjectName("label_2")
-        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(20, 350, 281, 101))
+        self.label_3 = QtWidgets.QLabel(self.centralwidget)
+        self.label_3.setGeometry(QtCore.QRect(280, 280, 431, 31))
+        self.label_3.setText("")
+        self.label_3.setObjectName("label_3")
+        self.pushButton_6 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_6.setGeometry(QtCore.QRect(750, 270, 131, 61))
         font = QtGui.QFont()
         font.setFamily("Sitka")
         font.setPointSize(18)
-        self.pushButton_2.setFont(font)
-        self.pushButton_2.setObjectName("pushButton_2")
+        self.pushButton_6.setFont(font)
+        self.pushButton_6.setObjectName("pushButton_6")
         self.pushButton_7 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_7.setGeometry(QtCore.QRect(30, 650, 111, 51))
+        self.pushButton_7.setGeometry(QtCore.QRect(30, 620, 131, 61))
         font = QtGui.QFont()
         font.setFamily("Sitka")
         font.setPointSize(18)
         self.pushButton_7.setFont(font)
         self.pushButton_7.setObjectName("pushButton_7")
+        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_2.setGeometry(QtCore.QRect(210, 410, 241, 91))
+        font = QtGui.QFont()
+        font.setFamily("Sitka")
+        font.setPointSize(18)
+        self.pushButton_2.setFont(font)
+        self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_3.setGeometry(QtCore.QRect(810, 240, 161, 71))
+        self.pushButton_3.setGeometry(QtCore.QRect(510, 410, 241, 91))
         font = QtGui.QFont()
         font.setFamily("Sitka")
         font.setPointSize(18)
         self.pushButton_3.setFont(font)
         self.pushButton_3.setObjectName("pushButton_3")
-        self.label_3 = QtWidgets.QLabel(self.centralwidget)
-        self.label_3.setGeometry(QtCore.QRect(310, 370, 491, 51))
-        font = QtGui.QFont()
-        font.setPointSize(9)
-        self.label_3.setFont(font)
-        self.label_3.setText("")
-        self.label_3.setObjectName("label_3")
-        self.pushButton_4 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_4.setGeometry(QtCore.QRect(810, 360, 161, 71))
-        font = QtGui.QFont()
-        font.setFamily("Sitka")
-        font.setPointSize(18)
-        self.pushButton_4.setFont(font)
-        self.pushButton_4.setObjectName("pushButton_4")
-        self.pushButton_6 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_6.setGeometry(QtCore.QRect(580, 490, 321, 111))
-        font = QtGui.QFont()
-        font.setFamily("Sitka")
-        font.setPointSize(18)
-        self.pushButton_6.setFont(font)
-        self.pushButton_6.setObjectName("pushButton_10")
-        self.pushButton_5 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_5.setGeometry(QtCore.QRect(200, 490, 321, 111))
-        font = QtGui.QFont()
-        font.setFamily("Sitka")
-        font.setPointSize(18)
-        self.pushButton_5.setFont(font)
-        self.pushButton_5.setObjectName("pushButton_5")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -309,48 +284,6 @@ class Ui_letter(object):
                 border-style: inset;
             }
         ''')
-        self.pushButton_4.setStyleSheet('''
-            QPushButton {
-                background-color:  #F5F5F5;
-                border-style: outset;
-                border-width: 2px;
-                border-radius: 10px;
-                border-color: black;
-                min-width: 10em;
-                padding: 6px;
-            }
-
-            QPushButton:hover {
-                background-color: #CCCCCC;
-                border-style: outset;
-            }
-
-            QPushButton:pressed {
-                background-color: #CCCCCC;
-                border-style: inset;
-            }
-        ''')
-        self.pushButton_5.setStyleSheet('''
-            QPushButton {
-                background-color:  #F5F5F5;
-                border-style: outset;
-                border-width: 2px;
-                border-radius: 10px;
-                border-color: black;
-                min-width: 10em;
-                padding: 6px;
-            }
-
-            QPushButton:hover {
-                background-color: #CCCCCC;
-                border-style: outset;
-            }
-
-            QPushButton:pressed {
-                background-color: #CCCCCC;
-                border-style: inset;
-            }
-        ''')
         self.pushButton_6.setStyleSheet('''
             QPushButton {
                 background-color:  #F5F5F5;
@@ -398,16 +331,13 @@ class Ui_letter(object):
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "Генератор благодарственных писем"))
+        MainWindow.setWindowTitle(_translate("MainWindow", "Генерация и отправка сертификатов"))
         self.pushButton.setText(_translate("MainWindow", "Выбрать шаблон \n"
-"благодарственного письма"))
-        self.label.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Генерация и Отправка благодартсвенных <br/>писем</p></body></html>"))
-        self.pushButton_2.setText(_translate("MainWindow", "Выбрать данные"))
+"сертификата"))
+        self.label.setText(_translate("MainWindow", "Генерация и Отправка сертификатов"))
+        self.pushButton_6.setText(_translate("MainWindow", "Очистить"))
         self.pushButton_7.setText(_translate("MainWindow", "Назад"))
-        self.pushButton_3.setText(_translate("MainWindow", "Очистить"))
-        self.pushButton_4.setText(_translate("MainWindow", "Очистить"))
-        self.pushButton_6.setText(_translate("MainWindow", "Отправка благодарственного \n"
-"письма"))
-        self.pushButton_5.setText(_translate("MainWindow", "Генерация благодарственного \n"
-"письма"))
-
+        self.pushButton_2.setText(_translate("MainWindow", "Генерация \n"
+"сертификатов"))
+        self.pushButton_3.setText(_translate("MainWindow", "Отправка \n"
+"сертификатов"))

@@ -10,20 +10,20 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.application import MIMEApplication
-from ui_diploma import Ui_DiplomaWindow
+from ui_sertificate import Ui_SertificateWindow
 from sqlalchemy import create_engine, Table, Column, Integer, String, MetaData
 from Classes.SendMail import SendMail
 from settings import settings
-class WindowDiploma(QtWidgets.QMainWindow):
+class WindowSertificate(QtWidgets.QMainWindow):
     def __init__(self):
-        super(WindowDiploma, self).__init__()
-        self.ui = Ui_DiplomaWindow()
+        super(WindowSertificate, self).__init__()
+        self.ui = Ui_SertificateWindow()
         self.ui.setupUi(self)
         
-        self.ui.pushButton.clicked.connect(self.diploma_sample)
-        self.ui.pushButton_2.clicked.connect(self.add_labels_to_diploma)
-        self.ui.pushButton_3.clicked.connect(self.send_diploma_to_email)
-        self.ui.pushButton_6.clicked.connect(self.delete_label_text_diploma)
+        self.ui.pushButton.clicked.connect(self.sertificate_sample)
+        self.ui.pushButton_2.clicked.connect(self.add_labels_to_sertificate)
+        self.ui.pushButton_3.clicked.connect(self.send_sertificate_to_email)
+        self.ui.pushButton_6.clicked.connect(self.delete_label_text_sertificate)
         self.ui.pushButton_7.clicked.connect(self.exit)
 
         self.__mail = SendMail(settings.mail_server,
@@ -34,41 +34,40 @@ class WindowDiploma(QtWidgets.QMainWindow):
     def databased(self):
         engine = create_engine('sqlite:///diploma.db', echo=True)
         metadata = MetaData()
-        mytable = Table('diploma', metadata,
+        mytable = Table('sertificate', metadata,
                         Column('id', Integer, primary_key=True),
-                        Column('last_name', String),
+                        Column('second_name', String),
                         Column('first_name', String),
                         Column('patronymic', String),
-                        Column('place', String),
                         Column('email', String))
         self.connection = engine.connect()
         self.result = self.connection.execute(mytable.select())
 
-    def add_labels_to_diploma(self):
+    def add_labels_to_sertificate(self):
         self.databased()
 
         for participant in self.result:
-            item = (participant[1], participant[2], participant[3], str(participant[4]), participant[5])
+            item = (participant[1], participant[2], participant[3], participant[4])
             dictor = self.create_data(item)
-            file_choice_diploma = self.get_url_to_diploma() 
-            doc = docx.Document(file_choice_diploma)
+            file_choice_sertificate = self.get_url_to_sertificate() 
+            doc = docx.Document(file_choice_sertificate)
             style = doc.styles['Normal']
             font = style.font
             font.size = docx.shared.Pt(14)
             font.name = 'Times New Roman'
 
             paragraph = None
-            count_entry_diploma = 0
-            new_text_diploma = None
+            count_entry_sertificate = 0
+            new_text_sertificate = None
 
             for paragraph in doc.paragraphs:
-                new_text_diploma, count_entry_diploma = re.subn('|'.join(dictor.keys()), lambda match: dictor[match.group()], paragraph.text)
-            if count_entry_diploma > 0:
-                paragraph.text = new_text_diploma
+                new_text_sertificate, count_entry_sertificate = re.subn('|'.join(dictor.keys()), lambda match: dictor[match.group()], paragraph.text)
+            if count_entry_sertificate > 0:
+                paragraph.text = new_text_sertificate
 
 
-            name_file_diploma = ' '.join(item[:4])
-            doc.save(f'{name_file_diploma} место.docx')
+            name_file_sertificate = ' '.join(item[:3])
+            doc.save(f'{name_file_sertificate}.docx')
 
         self.connection.close()
 
@@ -80,7 +79,7 @@ class WindowDiploma(QtWidgets.QMainWindow):
         self.main.show()
         self.close()
         
-    def diploma_sample(self):
+    def sertificate_sample(self):
         self.file_dialog = QFileDialog(self, 'Выбрать файл', 'C://')
         self.file_dialog.setFileMode(QFileDialog.ExistingFile)
         self.file_dialog.setNameFilter("Microsoft Word (*.doc *.docx)")
@@ -89,68 +88,64 @@ class WindowDiploma(QtWidgets.QMainWindow):
             if QFileInfo(self.file_choice).suffix() not in ["doc", "docx"]:
                 QMessageBox.warning(self, "Ошибка", "Выбранный файл не является документом Word (.doc или .docx)")
                 return 
-            self.ui.label_2.setText(self.file_choice)
+            self.ui.label_3.setText(self.file_choice)
 
 
+    def delete_label_text_sertificate(self):
+        self.ui.label_3.setText('')
 
-
-    def delete_label_text_diploma(self):
-        self.ui.label_2.setText('')
-
-
-    def get_url_to_diploma(self):
-        return self.ui.label_2.text()
-  
     
+    def get_url_to_sertificate(self):
+        return self.ui.label_3.text()
+
 
     def create_data(self,item: list) -> dict:  # Создание словаря с метками и их значениями
         self.full_name = f'{item[0]} {item[1]} {item[2]}'
-        self.place = item[3]
-        self.full_name_dictionary_and_place = {
+        
+        self.full_name_dictionary = {
                             '{{full_name}}': self.full_name,
-                            '{{place}}': self.place,     
                                         }
-        return self.full_name_dictionary_and_place
+        return self.full_name_dictionary
 
-    
-    
+
+
     def create_mail(self, item):
-        self.mail = item[4]
+        self.mail = item[3]
         return self.mail
 
-    def send_diploma_to_email(self):
+    def send_sertificate_to_email(self):
         self.databased()
         messages = []
         for participant in self.result:
-            item = (participant[1], participant[2], participant[3], str(participant[4]), participant[5])
+            item = (participant[1], participant[2], participant[3], participant[5])
             dictor = self.create_data(item)
-            file_choice_diploma = self.get_url_to_diploma() 
-            doc = docx.Document(file_choice_diploma)
+            file_choice_sertificate = self.get_url_to_sertificate() 
+            doc = docx.Document(file_choice_sertificate)
             style = doc.styles['Normal']
             font = style.font
             font.size = docx.shared.Pt(14)
             font.name = 'Times New Roman'
 
             paragraph = None
-            count_entry_diploma = 0
-            new_text_diploma = None
+            count_entry_sertificate = 0
+            new_text_sertificate = None
 
             for paragraph in doc.paragraphs:
-                new_text_diploma, count_entry_diploma = re.subn('|'.join(dictor.keys()), lambda match: dictor[match.group()], paragraph.text)
-            if count_entry_diploma > 0:
-                paragraph.text = new_text_diploma
+                new_text_sertificate, count_entry_sertificate = re.subn('|'.join(dictor.keys()), lambda match: dictor[match.group()], paragraph.text)
+            if count_entry_sertificate > 0:
+                paragraph.text = new_text_sertificate
 
 
-            name_file_diploma = ' '.join(item[:4])
-            doc.save(f'{name_file_diploma} место.docx')
+            name_file_sertificate = ' '.join(item[:4])
+            doc.save(f'{name_file_sertificate}.docx')
             
-            # Convert the docx file to pdf
-            doc_pdf_path = f'{name_file_diploma} место.pdf'
-            docx2pdf.convert(f'{name_file_diploma} место.docx', doc_pdf_path)
+    
+            doc_pdf_path = f'{name_file_sertificate}.pdf'
+            docx2pdf.convert(f'{name_file_sertificate}.docx', doc_pdf_path)
 
             mail_to_deliver = self.create_mail(item)
             subject = 'Диплом'
-            text = 'Вы выиграли в олимпиаде! Диплом во вложении письма'
+            text = 'Спасибо за участие в олимпиаде! Сертификат во вложении письма'
             files = [doc_pdf_path]
 
 
@@ -158,13 +153,13 @@ class WindowDiploma(QtWidgets.QMainWindow):
             msg['From'] = settings.mail_login
             msg['To'] = mail_to_deliver
             msg['Subject'] = subject
-            # тут текст из text
+    
             msg.attach(MIMEText(text))
             if files:
                 for file in files:
                     with open(file, 'rb') as file_user:
                         attach = MIMEApplication(file_user.read(), _subtype='pdf')
-                        attach.add_header('Content-Disposition', 'attachment', filename=f'{name_file_diploma} место.pdf')
+                        attach.add_header('Content-Disposition', 'attachment', filename=f'{name_file_sertificate}.pdf')
 
                         msg.attach(attach)
 
@@ -173,5 +168,3 @@ class WindowDiploma(QtWidgets.QMainWindow):
         self.__mail.send_message(messages)
         self.connection.close()
     
-    
-
